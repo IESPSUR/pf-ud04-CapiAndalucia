@@ -1,3 +1,6 @@
 from django.contrib import admin
+import tienda.models
 
-# Register your models here.
+admin.site.register(tienda.models.Productos)
+admin.site.register(tienda.models.Marca)
+admin.site.register(tienda.models.Compra)
