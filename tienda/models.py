@@ -1,6 +1,7 @@
 from django.db import models
 class Marca(models.Model):
     nombre = models.CharField(max_length=30)
+
 class Productos(models.Model):
     nombre = models.CharField(max_length=30)
     modelo = models.CharField(max_length=30)
