@@ -1,19 +1,19 @@
 from django.db import models
 class Marca(models.Model):
-    nombre = models.CharField(max_length=30)
+    nombre = models.CharField('Nombre', max_length=30, unique=True)
 
 class Productos(models.Model):
-    nombre = models.CharField(max_length=30)
-    modelo = models.CharField(max_length=30)
+    nombre = models.CharField('Nombre',max_length=30)
+    modelo = models.CharField('Modelo', max_length=30)
     marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
-    unidades = models.IntegerField()
-    precio = models.IntegerField()
-    detalles = models.CharField(max_length=30)
+    unidades = models.IntegerField('Unidades')
+    precio = models.DecimalField('Precio', max_digits=5, decimal_places=2, default=0)
+    detalles = models.CharField('Detalles',max_length=30, null=True)
 
 class Compra(models.Model):
-    fecha = models.DateField()
-    unidades = models.IntegerField()
-    importe = models.CharField(max_length=30)
+    fecha = models.DateField('Fecha')
+    unidades = models.IntegerField('Unidades')
+    importe = models.CharField('Importe',max_length=30)
     producto = models.ForeignKey(Productos, on_delete=models.CASCADE)
 
 
