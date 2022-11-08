@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado</title>
+</head>
+<body>
+    <h1>Listado</h1>
+    <table border = 3>
+        <tr>
+            <td>ID</td>
+            <td>Nombre</td>
+            <td>Marca</td>
+            <td>Modelo</td>
+            <td>Unidades</td>
+            <td>Precio</td>
+            <td>Detalles</td>
+        </tr>
+        {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td><a href=""> {{ post.nombre }} </a></td>
+                <td>{{ post.marca }}</td>
+                <td>{{ post.modelo }}</td>
+                <td>{{ post.unidades }}</td>
+                <td>{{ post.precio }}</td>
+                <td>{{ post.detalles }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+</body>
+</html>
