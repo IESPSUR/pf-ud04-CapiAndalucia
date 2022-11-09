@@ -3,10 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Listado</title>
+    <style>
+        h1{
+            text-align: center;
+        }
+        td{
+            padding-left: 50px;
+            text-align: center;
+            padding-bottom: 30px;
+        }
+        button{
+            height: 40px;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Listado</h1>
-    <table border = 3>
+    <table style="margin: 0 auto; font-size: 30px">
         <tr>
             <td>ID</td>
             <td>Nombre</td>
@@ -19,13 +35,16 @@
         {% for post in posts %}
             <tr>
                 <td>{{ post.id }}</td>
-                <td><a href=""> {{ post.nombre }} </a></td>
+                <td>{{ post.nombre }}</td>
                 <td>{{ post.marca }}</td>
                 <td>{{ post.modelo }}</td>
                 <td>{{ post.unidades }}</td>
                 <td>{{ post.precio }}</td>
                 <td>{{ post.detalles }}</td>
+                <td><button style="background-color:#2fff2f; cursor: pointer"><a href="{% url 'editar' pk=post.id %}">EDITAR</a></button></td>
+                <td><button style="background-color:#ff5151; cursor: pointer"><a href="{% url 'eliminar' pk=post.id %}">BORRAR </a></button></td>
             </tr>
+
         {% endfor %}
 
     </table>

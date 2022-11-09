@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Producto</title>
+</head>
+<body>
+    <form action="{% url 'editar' pk=produc.id %} " method="POST">
+    {% csrf_token %}
+
+        {% for campo in formulario %}
+
+            <h1>{{ campo.label }}</h1>
+            <input
+                    name="{{ campo.name }}"
+                    type="{{ campo.field.widget.input_type }}"
+                    placeholder="{{ campo.label }}"
+                    id="{{ campo.name }}" value="{{ campo.value }}">
+
+                {{ campo.errors }}
+                {{ campo.non_field_errors }}
+                {{ campo.non_form_errors }}
+        {% endfor %}
+
+
+        <input style="background-color: aqua" type="submit" value="Enviar información">
+    </form>
+</body>
+</html>

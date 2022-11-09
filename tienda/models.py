@@ -1,4 +1,5 @@
 from django.db import models
+
 class Marca(models.Model):
     nombre = models.CharField('Nombre', max_length=30, unique=True)
 
@@ -16,11 +17,19 @@ class Productos(models.Model):
     def __str__(self):
         return self.nombre
 
+
+class User(models.Model):
+    nombre = models.CharField('Nombre', max_length=30)
+
+    def __str__(self):
+        return self.nombre
+
 class Compra(models.Model):
     fecha = models.DateField('Fecha')
     unidades = models.IntegerField('Unidades')
     importe = models.CharField('Importe',max_length=30)
     producto = models.ForeignKey(Productos, on_delete=models.CASCADE)
+    nombre = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 
