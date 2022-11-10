@@ -12,11 +12,11 @@
             text-align: center;
             padding-bottom: 30px;
         }
-        button{
-            height: 40px;
-        }
         a{
+            cursor: pointer;
+            padding: 14px;
             text-decoration: none;
+            color: black;
         }
     </style>
 </head>
@@ -41,8 +41,8 @@
                 <td>{{ post.unidades }}</td>
                 <td>{{ post.precio }}</td>
                 <td>{{ post.detalles }}</td>
-                <td><button style="background-color:#2fff2f; cursor: pointer"><a href="{% url 'editar' pk=post.id %}">EDITAR</a></button></td>
-                <td><button style="background-color:#ff5151; cursor: pointer"><a href="{% url 'eliminar' pk=post.id %}">BORRAR </a></button></td>
+                <td><a style=" background-color:#2fff2f;" href="{% url 'editar' pk=post.id %}">EDITAR</a></td>
+                <td><a style=" background-color:#ff5151;" href="{% url 'eliminar' pk=post.id %}">BORRAR </a></td>
             </tr>
 
         {% endfor %}
