@@ -7,6 +7,9 @@
         h1{
             text-align: center;
         }
+        table{
+
+        }
         td{
             padding-left: 50px;
             text-align: center;
@@ -22,7 +25,7 @@
 </head>
 <body>
     <h1>Listado</h1>
-    <table style="margin: 0 auto; font-size: 30px">
+    <table style="margin: 0 auto; font-size: 30px; margin-bottom: 50px; border-bottom: 3px solid #bdc2c6;">
         <tr>
             <td>ID</td>
             <td>Nombre</td>
@@ -41,12 +44,12 @@
                 <td>{{ post.unidades }}</td>
                 <td>{{ post.precio }}</td>
                 <td>{{ post.detalles }}</td>
-                <td><a style=" background-color:#2fff2f;" href="{% url 'editar' pk=post.id %}">EDITAR</a></td>
-                <td><a style=" background-color:#ff5151;" href="{% url 'eliminar' pk=post.id %}">BORRAR </a></td>
+                <td><a style=" background-color:#2fff2f;" href="{% url 'tienda:editar' pk=post.id %}">EDITAR</a></td>
+                <td><a style=" background-color:#ff5151;" href="{% url 'tienda:eliminar' pk=post.id %}">BORRAR </a></td>
             </tr>
 
         {% endfor %}
-
     </table>
+    <a style=" background-color:#51beff; margin-left: 90%;" href="{% url 'tienda:nuevo' %}">NUEVO</a>
 </body>
 </html>

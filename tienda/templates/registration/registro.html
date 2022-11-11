@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>REGISTRARSE</title>
+</head>
+<body>
+    <form action="{% url 'tienda:registro' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn" type="submit">REGISTRAR </button>
+    </form>
+
+    Si ya tienes una cuenta, pincha en <a href="{% url 'tienda:login' %}">INICIAR SESION</a>
+
+</body>
+</html>

@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Producto</title>
-    <style>
+    <title>Crear Nuevo Producto</title>
+        <style>
         a{
             cursor: pointer;
             padding: 15px;
             text-decoration: none;
             color: black;
-
         }
         th{
             padding-left: 50px;
@@ -27,11 +26,12 @@
 <body>
     <div style="display: flex; align-items: center; justify-content: center">
         <div>
-            <form action="{% url 'tienda:editar' pk=produc.id %} " method="POST">
+            <form action="{% url 'tienda:nuevo' %} " method="POST">
             {% csrf_token %}
 
                 {% for campo in formulario %}
                     <h1>{{ campo.label }}</h1>
+
                     {% for error in campo.errors %}
                             <p style="color: red">{{ error }}</p>
                     {% endfor %}
@@ -40,20 +40,20 @@
                             name="{{ campo.name }}"
                             type="{{ campo.field.widget.input_type }}"
                             placeholder="{{ campo.label }}"
-                            id="{{ campo.name }}" value="{{ campo.value }}"
+                            id="{{ campo.name }}"
                             style="height: 50px; width: 400px; font-size: 20px"
+                            value="{{ campo.value }}"
                             step="any">
 
 
                 {% endfor %}
 
                 <br>
-                <input style="height: 50px; width: 400px; font-size: 20px; background-color: aqua; cursor: pointer" type="submit" value="Enviar información">
+                <input style="height: 50px; width: 400px; font-size: 20px; background-color: aqua; cursor: pointer" type="submit" value="CREAR NUEVO PRODUCTO">
                 <a style=" background-color:#ffcb94;" href="{% url 'tienda:listado' %}">VOLVER</a>
             </form>
         </div>
         <div style="margin: 20px; margin-left: 70px">
-
             <table style="margin: 0 auto; font-size: 30px; border-left: 10px solid aliceblue">
                 <th>Lista de Marcas</th>
                 {% for post in posts %}
@@ -62,7 +62,6 @@
                     </tr>
                 {% endfor %}
             </table>
-
         </div>
     </div>
 </body>
