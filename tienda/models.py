@@ -26,6 +26,9 @@ class Compra(models.Model):
     producto = models.ForeignKey(Productos, on_delete=models.SET_NULL, null=True)
     nombre_usuario = models.CharField('Nombre Usuario',max_length=50)
 
+    def __str__(self):
+        return str(self.id) + ' ' + self.nombre_usuario
+
 
 
 

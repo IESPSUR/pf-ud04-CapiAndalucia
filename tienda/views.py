@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
-from tienda.models import Productos, Marca
+from tienda.models import Productos, Marca, Compra
 from .forms import ProductosForm, CustomUserCreationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
@@ -22,15 +24,14 @@ def listado_producto(request):
         posts = Productos.objects.all()
         return render(request, 'tienda/listado.html', {'posts': posts})
     else:
-        return redirect('tienda:registro')
+        return redirect('tienda:login')
 
 
 
 
 #Creamos un metodo el cual modifica el producto que nos pasan como parametro
-@user_passes_test(lambda u: u.is_superuser)
+
 def editar(request, pk):
-    userform = UserCreationForm(request.POST)
     if request.user.is_superuser:
         produc = Productos.objects.get(id = pk)
         posts = Productos.objects.all()
@@ -46,16 +47,15 @@ def editar(request, pk):
 
         return render(request, 'tienda/edicion.html', {'formulario' : formulario, 'produc':produc, 'posts':marca})
     else:
-        return render(request, 'registration/registro.html', {"form": userform})
+        return redirect('tienda:login')
 
 
 
 
 
 #Creamos un metrodo el cual recibe el request y el id del producto que queremos eliminar
-@user_passes_test(lambda u: u.is_superuser)
+
 def eliminar(request, pk):
-    userform = UserCreationForm(request.POST)
     if request.user.is_superuser:
         #devolvemos el producto a traves del id que le hemos pasado
         produc = Productos.objects.get(id=pk)
@@ -63,21 +63,23 @@ def eliminar(request, pk):
         produc.delete()
         return redirect('tienda:listado')
     else:
-        return render(request, 'registration/registro.html', {"form": userform})
+        return redirect('tienda:login')
 
 
 
-@user_passes_test(lambda u: u.is_superuser)
+
 def nuevo(request):
-    formulario = ProductosForm(request.POST or None)
-    posts = Productos.objects.all()
-    marca = Marca.objects.all()
+    if request.user.is_superuser:
+        formulario = ProductosForm(request.POST or None)
+        posts = Productos.objects.all()
+        marca = Marca.objects.all()
 
-    if formulario.is_valid():
-        formulario.save()
-        return redirect('tienda:listado')
-    return render(request, 'tienda/nuevo.html', {'formulario':formulario, 'posts':marca})
-
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('tienda:listado')
+        return render(request, 'tienda/nuevo.html', {'formulario':formulario, 'posts':marca})
+    else:
+        return redirect('tienda:login')
 
 
 
@@ -130,8 +132,9 @@ def cerrarsesion(request):
     return redirect('tienda:welcome')
 
 
+
 def compras(request):
-    if request.user.is_superuser:
+    if request.user.is_authenticated:
         busqueda = request.GET.get('buscar')#Traeme el contenido que tenga en el form con el name='buscar'
         posts = Productos.objects.all()
 
@@ -142,12 +145,34 @@ def compras(request):
             ).distinct()
         return render(request, 'compras/compra.html', {'posts': posts} )
     else:
-        return redirect('tienda:registro')
+        return redirect('tienda:login')
+
 
 def checkout(request, id):
+    if request.user.is_authenticated:
+        produc = Productos.objects.get(id=id)
+        conjunto = Productos.objects.all()
 
-    produc = Productos.objects.get(id=id)
-    return render(request, 'compras/checkout.html', {'post':produc} )
+        if request.method=='POST':
+            cantidad= int(request.POST.get('cantidad'))
+            unidades = produc.unidades
+
+            if cantidad < unidades:
+                resultado = unidades - cantidad
+                produc.unidades = resultado
+                produc.save()
+
+                compra = Compra( fecha = datetime.today().strftime('%Y-%m-%d'), unidades = cantidad, importe = round(cantidad * produc.precio, 2) , producto = produc, nombre_usuario = request.user )
+                compra.save()
+
+                return redirect('tienda:compras')
+            else:
+                return render(request, 'compras/checkout.html', {'post':produc , 'valor' : False} )
+
+        return render(request, 'compras/checkout.html', {'post':produc} )
+    else:
+        return redirect('tienda:login')
+
 
 
 

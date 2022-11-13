@@ -1,33 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>CheckOut</title>
-</head>
-<body>
+{% extends 'tienda/base.html' %}
+
+
+{% block content %}
+    <style>
+         button{
+            cursor: pointer;
+            padding: 14px;
+            text-decoration: none;
+            color: black;
+            background-color:#2fff2f;
+        }
+         input{
+             padding: 8px;
+             font-size: 25px;
+             width: 90px;
+             border: none;
+
+         }
+         li{
+             list-style: none;
+             font-size: 30px;
+         }
+    </style>
+
     <h1>Información del producto</h1>
-    <table style="margin: 0 auto; font-size: 30px; margin-bottom: 50px; border-bottom: 3px solid #bdc2c6;">
-        <tr>
-            <td>ID</td>
-            <td>Nombre</td>
-            <td>Marca</td>
-            <td>Modelo</td>
-            <td>Unidades</td>
-            <td>Precio</td>
-            <td>Detalles</td>
-        </tr>
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.nombre }}</td>
-                <td>{{ post.marca }}</td>
-                <td>{{ post.modelo }}</td>
-                <td>{{ post.unidades }}</td>
-                <td>{{ post.precio }}</td>
-                <td>{{ post.detalles }}</td>
-                <td><a style=" background-color:#2fff2f;" href="{% url 'tienda:editar' pk=post.id %}">EDITAR</a></td>
-                <td><a style=" background-color:#ff5151;" href="{% url 'tienda:eliminar' pk=post.id %}">BORRAR </a></td>
-            </tr>
-    </table>
+    <form action='' method="post">
+        {% csrf_token %}
+
+            <ul>
+                <li>Nombre: {{ post.nombre }}</li>
+                <li>Marca: {{ post.marca }}</li>
+                <li>Modelo: {{ post.modelo }}</li>
+                <li>Unidades Disponibles: {{ post.unidades }}</li>
+                <li>Precio: {{ post.precio }} € </li>
+                <li>Detalles: {{ post.detalles }}</li>
+                <li><input type="number" value="1" name="cantidad"></li>
+                <li><button type="submit">COMPRAR </button></li>
+            </ul>
+    </form>
+    {% if valor is False %}
+        <h1>No hay suficiente stock</h1>
+    {% endif %}
     <a style=" background-color:#ffcb94;" href="{% url 'tienda:compras' %}">VOLVER</a>
-</body>
-</html>
+
+{% endblock %}

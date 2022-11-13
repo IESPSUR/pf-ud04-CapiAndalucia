@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Listado</title>
+{% extends 'tienda/base.html' %}
+{% block content %}
     <style>
-        h1{
+        .titulo{
             text-align: center;
         }
         table{
@@ -15,16 +12,15 @@
             text-align: center;
             padding-bottom: 30px;
         }
-        a{
+        .enlace{
             cursor: pointer;
             padding: 14px;
             text-decoration: none;
             color: black;
         }
     </style>
-</head>
-<body>
-    <h1>Listado</h1>
+
+    <h1 class="titulo">Listado</h1>
     <table style="margin: 0 auto; font-size: 30px; margin-bottom: 50px; border-bottom: 3px solid #bdc2c6;">
         <tr>
             <td>ID</td>
@@ -44,14 +40,13 @@
                 <td>{{ post.unidades }}</td>
                 <td>{{ post.precio }}</td>
                 <td>{{ post.detalles }}</td>
-                <td><a style=" background-color:#2fff2f;" href="{% url 'tienda:editar' pk=post.id %}">EDITAR</a></td>
-                <td><a style=" background-color:#ff5151;" href="{% url 'tienda:eliminar' pk=post.id %}">BORRAR </a></td>
+                <td><a class="enlace" style=" background-color:#2fff2f;" href="{% url 'tienda:editar' pk=post.id %}">EDITAR</a></td>
+                <td><a class="enlace"style=" background-color:#ff5151;" href="{% url 'tienda:eliminar' pk=post.id %}">BORRAR </a></td>
             </tr>
 
         {% endfor %}
     </table>
-    <a style=" background-color:#ffcb94;" href="{% url 'tienda:welcome' %}">VOLVER</a>
-    <a style=" background-color:#51beff;" href="{% url 'tienda:nuevo' %}">NUEVO</a>
+    <a class="enlace" style=" background-color:#ffcb94;" href="{% url 'tienda:welcome' %}">VOLVER</a>
+    <a class="enlace" style=" background-color:#51beff;" href="{% url 'tienda:nuevo' %}">NUEVO</a>
 
-</body>
-</html>
+{% endblock %}

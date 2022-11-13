@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>INICIAR SESION</title>
+{% extends 'tienda/base.html' %}
+{% block content %}
     <style>
-        a{
+        .enlace{
             cursor: pointer;
             padding: 15px;
             text-decoration: none;
@@ -12,8 +9,6 @@
 
         }
     </style>
-</head>
-<body>
     {% csrf_token %}
     <h2>Ingresa las credenciales</h2>
     <form action="{% url 'tienda:login' %}" method="POST">
@@ -22,13 +17,12 @@
         {{ form.as_p }}
         <input style=" background-color:#2fff2f; padding: 15px; cursor: pointer;" value="Iniciar sesion" type="submit">
     </form>
-    <p>Si no tienes una cuenta, pincha en <a href="{% url 'tienda:registro' %}" style="background-color:#51beff; cursor: pointer;">REGISTRO</a></p>
+    <p>Si no tienes una cuenta, pincha en <a class="enlace" href="{% url 'tienda:registro' %}" style="background-color:#51beff; cursor: pointer;">REGISTRO</a></p>
     <br>
-    <a style=" background-color:#ffcb94;
+    <a class="enlace" style=" background-color:#ffcb94;
                cursor: pointer;
                padding: 15px;
                text-decoration: none;
                color: black;"
        href="{% url 'tienda:welcome' %}">VOLVER</a>
-</body>
-</html>
+{% endblock %}
