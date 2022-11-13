@@ -2,29 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Listado</title>
-    <style>
-        h1{
-            text-align: center;
-        }
-        table{
-
-        }
-        td{
-            padding-left: 50px;
-            text-align: center;
-            padding-bottom: 30px;
-        }
-        a{
-            cursor: pointer;
-            padding: 14px;
-            text-decoration: none;
-            color: black;
-        }
-    </style>
+    <title>CheckOut</title>
 </head>
 <body>
-    <h1>Listado</h1>
+    <h1>Información del producto</h1>
     <table style="margin: 0 auto; font-size: 30px; margin-bottom: 50px; border-bottom: 3px solid #bdc2c6;">
         <tr>
             <td>ID</td>
@@ -35,7 +16,6 @@
             <td>Precio</td>
             <td>Detalles</td>
         </tr>
-        {% for post in posts %}
             <tr>
                 <td>{{ post.id }}</td>
                 <td>{{ post.nombre }}</td>
@@ -47,11 +27,7 @@
                 <td><a style=" background-color:#2fff2f;" href="{% url 'tienda:editar' pk=post.id %}">EDITAR</a></td>
                 <td><a style=" background-color:#ff5151;" href="{% url 'tienda:eliminar' pk=post.id %}">BORRAR </a></td>
             </tr>
-
-        {% endfor %}
     </table>
-    <a style=" background-color:#ffcb94;" href="{% url 'tienda:welcome' %}">VOLVER</a>
-    <a style=" background-color:#51beff;" href="{% url 'tienda:nuevo' %}">NUEVO</a>
-
+    <a style=" background-color:#ffcb94;" href="{% url 'tienda:compras' %}">VOLVER</a>
 </body>
 </html>

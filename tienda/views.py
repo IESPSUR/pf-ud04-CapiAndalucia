@@ -3,31 +3,32 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
 from tienda.models import Productos, Marca
-from .forms import ProductosForm
+from .forms import ProductosForm, CustomUserCreationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import Q
 
 from django.contrib.auth.models import User
 
 
 # Create your views here.
 def welcome(request):
-    
-    return render(request, 'tienda/index.html', {})
+    return render(request, 'tienda/index.html',)
+
+
 
 #@user_passes_test(lambda u: u.is_superuser)
 def listado_producto(request):
-    userform = UserCreationForm(request.POST)
     if request.user.is_superuser:
         posts = Productos.objects.all()
-        elementos = []
-        elementos.append(posts)
-        #formulario = ProductosForm(request.POST)
-        return render(request, 'tienda/listado.html', {'posts': posts, 'elemetos':elementos})
+        return render(request, 'tienda/listado.html', {'posts': posts})
     else:
-        return render(request, 'registration/registro.html', {"form": userform})
+        return redirect('tienda:registro')
+
+
+
 
 #Creamos un metodo el cual modifica el producto que nos pasan como parametro
-#@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_superuser)
 def editar(request, pk):
     userform = UserCreationForm(request.POST)
     if request.user.is_superuser:
@@ -41,15 +42,18 @@ def editar(request, pk):
         if request.method == 'POST' and formulario.is_valid():
 
             formulario.save()
-            return render(request, 'tienda/listado.html', {'posts': posts})
+            return redirect('tienda:listado')
 
         return render(request, 'tienda/edicion.html', {'formulario' : formulario, 'produc':produc, 'posts':marca})
     else:
         return render(request, 'registration/registro.html', {"form": userform})
 
 
+
+
+
 #Creamos un metrodo el cual recibe el request y el id del producto que queremos eliminar
-#@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_superuser)
 def eliminar(request, pk):
     userform = UserCreationForm(request.POST)
     if request.user.is_superuser:
@@ -57,10 +61,13 @@ def eliminar(request, pk):
         produc = Productos.objects.get(id=pk)
         posts = Productos.objects.all()
         produc.delete()
-        return render(request, 'tienda/listado.html', {'posts': posts})
+        return redirect('tienda:listado')
     else:
         return render(request, 'registration/registro.html', {"form": userform})
-#@user_passes_test(lambda u: u.is_superuser)
+
+
+
+@user_passes_test(lambda u: u.is_superuser)
 def nuevo(request):
     formulario = ProductosForm(request.POST or None)
     posts = Productos.objects.all()
@@ -68,8 +75,11 @@ def nuevo(request):
 
     if formulario.is_valid():
         formulario.save()
-        return render(request, 'tienda/listado.html', {'posts': posts})
+        return redirect('tienda:listado')
     return render(request, 'tienda/nuevo.html', {'formulario':formulario, 'posts':marca})
+
+
+
 
 def logear(request):
 
@@ -91,22 +101,54 @@ def logear(request):
     form = AuthenticationForm()
     return render(request, 'registration/login.html', {'form':form})
 
+
+
+
 def registrar(request):
-    form = UserCreationForm(request.POST)
-    if form.is_valid():
-        usuario = form.save()
-        nombre_usuario= form.cleaned_date.get('username')
-        messages.success(request, f'Nueva Cuenta Creada: {nombre_usuario}')
-        login(request, usuario)
-        messages.info(request,f'Has sido logueado como {nombre_usuario}')
-        return render(request, 'tienda/index.html', {})
-    else:
-        for msg in form.error_messages:
-            messages.error(request, f'{msg}: form.error_messages[msg]')
-    form = UserCreationForm
-    return render(request, 'registration/registro.html',{"form":form})
+    data = {
+        'form': UserCreationForm(request.POST)
+    }
+    if request.method=='POST':
+        formulario = CustomUserCreationForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            user = authenticate(username=formulario.cleaned_data['username'], password=formulario.cleaned_data['password1'])
+            login(request, user)
+            messages.success(request,'Te has registrado correctamente')
+            return redirect('tienda:welcome')
+        else:
+            for msg in formulario.error_messages:
+                messages.error(request, formulario.error_messages[msg])
+        data['form'] = formulario
+    return render(request, 'registration/registro.html', data)
+
+
 
 def cerrarsesion(request):
     logout(request)
-    return render(request, 'tienda/index.html')
+    messages.info(request, "Se cerró sesión")
+    return redirect('tienda:welcome')
+
+
+def compras(request):
+    if request.user.is_superuser:
+        busqueda = request.GET.get('buscar')#Traeme el contenido que tenga en el form con el name='buscar'
+        posts = Productos.objects.all()
+
+        if busqueda:
+            posts = Productos.objects.filter(
+                Q(nombre__icontains=busqueda) |
+                Q(marca__nombre__icontains=busqueda)#__icontains lo que hace es q no busque exactamente lo que pongamos
+            ).distinct()
+        return render(request, 'compras/compra.html', {'posts': posts} )
+    else:
+        return redirect('tienda:registro')
+
+def checkout(request, id):
+
+    produc = Productos.objects.get(id=id)
+    return render(request, 'compras/checkout.html', {'post':produc} )
+
+
+
 

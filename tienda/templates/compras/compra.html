@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compra</title>
+        <style>
+        h1{
+            text-align: center;
+        }
+        table{
+
+        }
+        td{
+            padding-left: 25px;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+        a{
+            cursor: pointer;
+            padding: 14px;
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>PAGINA COMPRA</h1>
+
+    <form action="{% url 'tienda:compras' %}" method="get">
+        <input type="text" placeholder="Buscar...." name="buscar">
+        <input type="submit">
+    </form>
+
+        <h1>Lista de productos</h1>
+        <table style="margin: 0 auto; font-size: 30px; margin-bottom: 50px; border-bottom: 3px solid #bdc2c6;">
+            <tr>
+                <td>ID</td>
+                <td>Nombre</td>
+                <td>Marca</td>
+                <td>Modelo</td>
+                <td>Unidades</td>
+                <td>Precio</td>
+                <td>Detalles</td>
+            </tr>
+            {% for post in posts %}
+                <tr>
+                    <td>{{ post.id }}</td>
+                    <td>{{ post.nombre }}</td>
+                    <td>{{ post.marca }}</td>
+                    <td>{{ post.modelo }}</td>
+                    <td>{{ post.unidades }}</td>
+                    <td>{{ post.precio }}</td>
+                    <td>{{ post.detalles }}</td>
+                    <td><a href="{% url 'tienda:checkout' id=post.id %}" style=" background-color:#2fff2f;">Comprar</a></td>
+                </tr>
+
+            {% endfor %}
+        </table>
+    <a style=" background-color:#ffcb94;" href="{% url 'tienda:welcome' %}">VOLVER</a>
+</body>
+</html>

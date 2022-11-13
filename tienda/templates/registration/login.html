@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>INICIAR SESION</title>
+    <style>
+        a{
+            cursor: pointer;
+            padding: 15px;
+            text-decoration: none;
+            color: black;
+
+        }
+    </style>
 </head>
 <body>
     {% csrf_token %}
@@ -11,8 +20,15 @@
         {% csrf_token %}
 
         {{ form.as_p }}
-        <input value="Iniciar sesion" type="submit">
+        <input style=" background-color:#2fff2f; padding: 15px; cursor: pointer;" value="Iniciar sesion" type="submit">
     </form>
-    Si no tienes una cuenta, pincha en <a href="{% url 'tienda:registro' %}">REGISTRO</a>
+    <p>Si no tienes una cuenta, pincha en <a href="{% url 'tienda:registro' %}" style="background-color:#51beff; cursor: pointer;">REGISTRO</a></p>
+    <br>
+    <a style=" background-color:#ffcb94;
+               cursor: pointer;
+               padding: 15px;
+               text-decoration: none;
+               color: black;"
+       href="{% url 'tienda:welcome' %}">VOLVER</a>
 </body>
 </html>

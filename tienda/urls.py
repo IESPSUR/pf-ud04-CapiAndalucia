@@ -3,6 +3,8 @@ from . import views
 
 app_name='tienda'
 urlpatterns = [
+    path('tienda/checkout/<int:id>', views.checkout, name='checkout'),
+    path('tienda/compras/', views.compras, name='compras'),
     path('loginout/', views.cerrarsesion, name="loginout"),
     path('registro/', views.registrar, name="registro"),
     path('login/', views.logear, name="login"),

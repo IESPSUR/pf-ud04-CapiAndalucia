@@ -24,7 +24,7 @@ class Compra(models.Model):
     unidades = models.IntegerField('Unidades')
     importe = models.CharField('Importe',max_length=50,validators=[validar_Textos])
     producto = models.ForeignKey(Productos, on_delete=models.SET_NULL, null=True)
-    #nombre = models.ForeignKey(User, on_delete=models.CASCADE)
+    nombre_usuario = models.CharField('Nombre Usuario',max_length=50)
 
 
 

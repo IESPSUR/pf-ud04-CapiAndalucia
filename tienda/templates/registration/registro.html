@@ -3,15 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>REGISTRARSE</title>
+    <style>
+        a{
+            cursor: pointer;
+            padding: 15px;
+            text-decoration: none;
+            color: black;
+
+        }
+    </style>
 </head>
 <body>
     <form action="{% url 'tienda:registro' %}" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn" type="submit">REGISTRAR </button>
+        {% for log in form %}
+            <h1>{{ log.label }}</h1>
+                    {% for error in log.errors %}
+                            <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                    <input
+                            name="{{ log.name }}"
+                            type="{{ log.field.widget.input_type }}"
+                            placeholder="{{ log.label }}"
+                            id="{{ log.name }}" value="{{ clog.value }}"
+                            style="height: 50px; width: 400px; font-size: 20px"
+                            step="any">
+        {% endfor %}
+        <button style=" background-color:#2fff2f;cursor: pointer; padding: 15px" class="btn" type="submit">REGISTRAR </button>
     </form>
 
-    Si ya tienes una cuenta, pincha en <a href="{% url 'tienda:login' %}">INICIAR SESION</a>
+    <p>Si ya tienes una cuenta, pincha en <a href="{% url 'tienda:login' %}" style="background-color:#51beff;">INICIAR SESION</a></p>
+    <br>
+    <a style=" background-color:#ffcb94;
+               cursor: pointer;
+               padding: 15px;
+               text-decoration: none;
+               color: black;"
+       href="{% url 'tienda:welcome' %}">VOLVER</a>
 
 </body>
 </html>
