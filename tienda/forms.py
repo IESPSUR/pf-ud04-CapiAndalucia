@@ -4,7 +4,9 @@ from django.core.exceptions import ValidationError
 
 from .models import Productos
 
-
+"""
+Form que utiliza los valores exactos del modelo Productos 
+"""
 class ProductosForm(forms.ModelForm):
 
     class Meta:

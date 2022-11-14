@@ -13,11 +13,16 @@ from django.contrib.auth.models import User
 
 
 # Create your views here.
+"""
+View de la pagina inicial
+"""
 def welcome(request):
     return render(request, 'tienda/index.html',)
 
 
-
+"""
+View que nos muestra una lista de los productos para el administrador
+"""
 #@user_passes_test(lambda u: u.is_superuser)
 def listado_producto(request):
     if request.user.is_superuser:
@@ -28,15 +33,14 @@ def listado_producto(request):
 
 
 
-
-#Creamos un metodo el cual modifica el producto que nos pasan como parametro
-
+"""
+Creamos un metodo el cual modifica el producto que nos pasan como parametro
+"""
 def editar(request, pk):
     if request.user.is_superuser:
         produc = Productos.objects.get(id = pk)
         posts = Productos.objects.all()
         marca = Marca.objects.all()
-
 
         formulario = ProductosForm(request.POST or None, instance=produc)
 
@@ -52,9 +56,9 @@ def editar(request, pk):
 
 
 
-
-#Creamos un metrodo el cual recibe el request y el id del producto que queremos eliminar
-
+"""
+Creamos un metrodo el cual recibe el request y el id del producto que queremos eliminar
+"""
 def eliminar(request, pk):
     if request.user.is_superuser:
         #devolvemos el producto a traves del id que le hemos pasado
@@ -67,7 +71,9 @@ def eliminar(request, pk):
 
 
 
-
+"""
+Creamos un metodo el cual crea un nuevo producto en la base de datos
+"""
 def nuevo(request):
     if request.user.is_superuser:
         formulario = ProductosForm(request.POST or None)
@@ -82,7 +88,9 @@ def nuevo(request):
         return redirect('tienda:login')
 
 
-
+"""
+Metodo que se usa para loguear al usuario
+"""
 def logear(request):
 
     if request.method=='POST':
@@ -105,7 +113,9 @@ def logear(request):
 
 
 
-
+"""
+Metodo que se usa para registrar a un nuevo usuario
+"""
 def registrar(request):
     data = {
         'form': UserCreationForm(request.POST)
@@ -125,14 +135,18 @@ def registrar(request):
     return render(request, 'registration/registro.html', data)
 
 
-
+"""
+Metodo que cierra la sesion al usuario actual
+"""
 def cerrarsesion(request):
     logout(request)
     messages.info(request, "Se cerró sesión")
     return redirect('tienda:welcome')
 
 
-
+"""
+View de la pagina Compras que nos muestra una lista de productos y podemos filtrar esos productos
+"""
 def compras(request):
     if request.user.is_authenticated:
         busqueda = request.GET.get('buscar')#Traeme el contenido que tenga en el form con el name='buscar'
@@ -147,7 +161,9 @@ def compras(request):
     else:
         return redirect('tienda:login')
 
-
+"""
+View que nos muestra los detalles de un producto y podemos comprar X unidades del producto
+"""
 def checkout(request, id):
     if request.user.is_authenticated:
         produc = Productos.objects.get(id=id)

@@ -38,7 +38,7 @@
                 <td>{{ post.marca }}</td>
                 <td>{{ post.modelo }}</td>
                 <td>{{ post.unidades }}</td>
-                <td>{{ post.precio }}</td>
+                <td>{{ post.precio }} €</td>
                 <td>{{ post.detalles }}</td>
                 <td><a class="enlace" style=" background-color:#2fff2f;" href="{% url 'tienda:editar' pk=post.id %}">EDITAR</a></td>
                 <td><a class="enlace"style=" background-color:#ff5151;" href="{% url 'tienda:eliminar' pk=post.id %}">BORRAR </a></td>
