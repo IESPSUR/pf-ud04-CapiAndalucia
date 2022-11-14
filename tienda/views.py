@@ -189,6 +189,28 @@ def checkout(request, id):
     else:
         return redirect('tienda:login')
 
+"""
+View que miestra el informe de la pagina
+"""
+
+def informe(request):
+    if request.user.is_superuser:
+        productos = Productos.objects.all()
+        marcas = Marca.objects.all()
+
+        if request.method == 'GET':
+            menu = request.GET.get('menu')
+            print(menu)
+            print(type(menu))
+            if menu:
+                productos = productos.filter(marca__nombre__icontains=menu)
+                print(productos)
+
+                return render(request, 'tienda/informes.html', {'productos': productos, 'marcas': marcas ,'menu':menu})
+
+        return render(request, 'tienda/informes.html', {'productos' : productos,'marcas':marcas})
+    else:
+        return redirect('tienda:login')
 
 
 

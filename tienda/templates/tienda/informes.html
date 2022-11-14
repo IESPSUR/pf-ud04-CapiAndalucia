@@ -1,0 +1,45 @@
+{% extends 'tienda/base.html' %}
+{% block content %}
+    <h1>Informes</h1>
+    <form action="{% url 'tienda:informe' %}" method="get">
+
+        <select name="menu">
+          <option value="" selected></option>
+            {% for marca in marcas %}
+              <option value="{{ marca.nombre }}">{{ marca.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit">
+    </form>
+    <table>
+            <tr>
+                <th>{{ menu }}</th>
+            </tr>
+            {% for product in productos %}
+                {% if menu is Nonetype %}
+                     <tr>
+                        <th>{{ product.marca }}</th>
+                     </tr>
+                {% endif %}
+                <tr>
+                    <td>{{ product.nombre }}</td>
+                </tr>
+                <tr>
+                    <td>{{ product.modelo }}</td>
+                </tr>
+                <tr>
+                    <td>{{ product.detalles }}</td>
+                </tr>
+                <tr>
+                    <td>{{ product.precio }} €</td>
+                </tr>
+                <tr>
+                    <td>{{ product.unidades }}</td>
+                </tr>
+
+            {% endfor %}
+
+
+    </table>
+{% endblock %}
