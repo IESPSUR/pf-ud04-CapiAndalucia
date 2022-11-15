@@ -39,9 +39,6 @@
                 <li><button type="submit">COMPRAR </button></li>
             </ul>
     </form>
-    {% if valor is False %}
-        <h1>No hay suficiente stock</h1>
-    {% endif %}
     <a style=" background-color:#ffcb94;" href="{% url 'tienda:compras' %}">VOLVER</a>
 
 {% endblock %}

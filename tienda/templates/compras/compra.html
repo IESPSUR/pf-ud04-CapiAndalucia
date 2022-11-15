@@ -40,10 +40,9 @@
             </tr>
 
             {% for post in posts %}
-                <form action="{% url 'tienda:compras'%}" method="POST">
-                {% csrf_token %}
+                <form action="{% url 'tienda:checkout' id=post.id %}" method="GET">
+                    {% csrf_token %}
                     <tr>
-                        <td style="display: none"><input value="{{ post.id }}" name="id"></td>
                         <td>{{ post.nombre }}</td>
 
                         <td>{{ post.modelo }}</td>
@@ -53,6 +52,7 @@
                         <td>{{ post.unidades }}</td>
 
                         <td><input type="number" value="1" name="cantidad"></td>
+
 
                         <td><button type="submit">Carrito</button></td>
                     </tr>

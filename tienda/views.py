@@ -1,12 +1,12 @@
 from datetime import datetime
 
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.db import transaction
+from django.db import transaction, connection
 from django.shortcuts import render, redirect
 from tienda.models import Productos, Marca, Compra
-from .forms import ProductosForm, CustomUserCreationForm
+from .forms import ProductosForm, CustomUserCreationForm, CantidadCompra
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 
@@ -158,6 +158,7 @@ def cerrarsesion(request):
 View de la pagina Compras que nos muestra una lista de productos y podemos filtrar esos productos
 """
 
+
 @transaction.atomic
 def compras(request):
     if request.user.is_authenticated:
@@ -170,12 +171,6 @@ def compras(request):
                 Q(marca__nombre__icontains=busqueda)
                 # __icontains lo que hace es q no busque exactamente lo que pongamos
             ).distinct()
-        #Añadido para probar
-        if request.method == 'POST':
-            cantidad = request.POST.get('cantidad')
-            id = request.POST.get('id')
-            return redirect('tienda:checkout',id=id,unit=cantidad)
-        #-------------
         return render(request, 'compras/compra.html', {'posts': posts})
     else:
         return redirect('tienda:login')
@@ -185,15 +180,20 @@ def compras(request):
 View que nos muestra los detalles de un producto y podemos comprar X unidades del producto
 """
 
+
 @transaction.atomic
-def checkout(request, id, unit):
+def checkout(request, id):
     if request.user.is_authenticated:
         produc = Productos.objects.get(id=id)
-        precio = unit * produc.precio
+        form = CantidadCompra(request.POST)
+        unit = int(request.GET.get('cantidad'))
+        unidades = int(produc.unidades)
+        cantidad = request.GET.get('cantidad')
+        unit = int(cantidad)
+        precio = int(unit) * produc.precio
+
+
         if request.method == 'POST':
-
-            unidades = produc.unidades
-
             if unit < unidades:
                 resultado = unidades - unit
                 produc.unidades = resultado
@@ -204,11 +204,10 @@ def checkout(request, id, unit):
                                 nombre_usuario=request.user)
                 compra.save()
 
-                return redirect('tienda:compras')
-            else:
-                return render(request, 'compras/checkout.html', {'post': produc, 'valor': False})
+            return redirect('tienda:compras')
 
-        return render(request, 'compras/checkout.html', {'post': produc, 'unidades':unit, 'precio':precio})
+        return render(request, 'compras/checkout.html',{'post': produc, 'unidades': unit, 'precio': precio, 'valor': True})
+
     else:
         return redirect('tienda:login')
 
@@ -220,23 +219,46 @@ View que miestra el informe de la pagina
 
 def informe(request):
     if request.user.is_superuser:
-        productos = Productos.objects.all()
+
         marcas = Marca.objects.all()
+        ventas = Compra.objects.all()
+        ventas = ventas.order_by('-unidades')[:10]
+        usuarios = User.objects.all()
+        productos = Productos.objects.all()
+        productos_ventas = Productos.objects.all()
+        menu = request.GET.get('menu')
+        top_product = Compra.objects.all().order_by('-unidades').prefetch_related('producto')
+        cursor = connection.cursor()
+        cursor.execute('select distinct tienda_productos.nombre from tienda_productos, tienda_compra where tienda_productos.id = tienda_compra.producto_id')
+        top_product2 = cursor.fetchone()
+        print(top_product2)
+
+        top_product3 = Compra.objects.raw('select distinct tienda_productos.nombre, tienda_productos.id from tienda_productos, tienda_compra where tienda_productos.id = tienda_compra.producto_id')
+        print(top_product3)
+
+        for s in top_product3:
+            print(s)
+
 
         if request.method == 'GET':
-            menu = request.GET.get('menu')
+
             if menu:
                 productos = productos.filter(marca__nombre__icontains=menu)
 
-                return render(request, 'tienda/informes.html', {'productos': productos, 'marcas': marcas, 'menu': menu})
+                return render(request, 'tienda/informes.html', {'productos': productos, 'marcas': marcas, 'menu': menu, 'ventas':ventas, 'users':usuarios, 'top_productos':top_product3[:10]})
 
-        return render(request, 'tienda/informes.html', {'productos': productos, 'marcas': marcas})
+        if request.method == 'POST':
+            productos2 = Productos.objects.all()
+            elec = request.POST.get('usuario')
+
+            print(usuarios)
+            print(type(usuarios))
+            if elec:
+                productos2 = Compra.objects.all().filter(nombre_usuario__icontains=elec)
+
+                return render(request, 'tienda/informes.html', {'productos': productos, 'usuario_compras':productos2, 'marcas': marcas, 'eleccion': elec, 'top_productos':top_product3[:10], 'ventas':ventas,'users':usuarios})
+        return render(request, 'tienda/informes.html', {'productos': productos, 'marcas': marcas, 'ventas':ventas, 'users':usuarios})
     else:
         return redirect('tienda:login')
 
 
-def te_productos(request):
-    if request.method == 'GET':
-        compras = Compra.objects.order_by()
-        mydata = Compra.objects.all().order_by('unidades').values().distinct()
-        return render(request, 'tienda/informes.html', {'compras': mydata})
