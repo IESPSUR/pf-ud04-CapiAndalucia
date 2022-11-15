@@ -4,7 +4,7 @@ from . import views
 app_name='tienda'
 urlpatterns = [
     path('tienda/informes', views.informe, name='informe'),
-    path('tienda/checkout/<int:id>', views.checkout, name='checkout'),
+    path('tienda/checkout/<int:id>/<int:unit>', views.checkout, name='checkout'),
     path('tienda/compras/', views.compras, name='compras'),
     path('loginout/', views.cerrarsesion, name="loginout"),
     path('registro/', views.registrar, name="registro"),

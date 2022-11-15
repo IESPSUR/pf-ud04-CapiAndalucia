@@ -16,4 +16,7 @@ class ProductosForm(forms.ModelForm):
 class CustomUserCreationForm(UserCreationForm):
     pass
 
+class CanidadCompra(forms.Form):
+    unit = forms.IntegerField(label='unit', max_value=100, min_value=1)
+
 

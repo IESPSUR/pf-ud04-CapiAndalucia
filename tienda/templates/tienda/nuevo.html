@@ -35,8 +35,8 @@
                     {% for error in campo.errors %}
                             <p style="color: red">{{ error }}</p>
                     {% endfor %}
-
-                    <input
+                    {% if formulario.errors %}
+                        <input
                             name="{{ campo.name }}"
                             type="{{ campo.field.widget.input_type }}"
                             placeholder="{{ campo.label }}"
@@ -45,6 +45,16 @@
                             value="{{ campo.value }}"
                             step="any">
 
+                    {% else %}
+                        <input
+                            name="{{ campo.name }}"
+                            type="{{ campo.field.widget.input_type }}"
+                            placeholder="{{ campo.label }}"
+                            id="{{ campo.name }}"
+                            style="height: 50px; width: 400px; font-size: 20px"
+                            value=""
+                            step="any">
+                    {% endif %}
 
                 {% endfor %}
 
