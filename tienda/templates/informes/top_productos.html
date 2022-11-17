@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table>
+
+    {% for venta in ventas %}
+        <tr>
+            <td>{{ venta.producto }}</td>
+            <td>{{ venta.fecha }}</td>
+            <td>{{ venta.unidades }}</td>
+            <td>{{ venta.importe }}</td>
+            <td>{{ venta.nombre_usuario }}</td>
+        </tr>
+    {% endfor %}
+
+    </table>
+</body>
+</html>

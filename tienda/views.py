@@ -192,7 +192,6 @@ def checkout(request, id):
         unit = int(cantidad)
         precio = int(unit) * produc.precio
 
-
         if request.method == 'POST':
             if unit < unidades:
                 resultado = unidades - unit
@@ -206,7 +205,8 @@ def checkout(request, id):
 
             return redirect('tienda:compras')
 
-        return render(request, 'compras/checkout.html',{'post': produc, 'unidades': unit, 'precio': precio, 'valor': True})
+        return render(request, 'compras/checkout.html',
+                      {'post': produc, 'unidades': unit, 'precio': precio, 'valor': True})
 
     else:
         return redirect('tienda:login')
@@ -229,23 +229,26 @@ def informe(request):
         menu = request.GET.get('menu')
         top_product = Compra.objects.all().order_by('-unidades').prefetch_related('producto')
         cursor = connection.cursor()
-        cursor.execute('select distinct tienda_productos.nombre from tienda_productos, tienda_compra where tienda_productos.id = tienda_compra.producto_id')
+        cursor.execute(
+            'select distinct tienda_productos.nombre from tienda_productos, tienda_compra where tienda_productos.id = tienda_compra.producto_id')
         top_product2 = cursor.fetchone()
         print(top_product2)
 
-        top_product3 = Compra.objects.raw('select distinct tienda_productos.nombre, tienda_productos.id from tienda_productos, tienda_compra where tienda_productos.id = tienda_compra.producto_id')
+        top_product3 = Compra.objects.raw(
+            'select distinct tienda_productos.nombre, tienda_productos.id from tienda_productos, tienda_compra where tienda_productos.id = tienda_compra.producto_id')
         print(top_product3)
 
         for s in top_product3:
             print(s)
-
 
         if request.method == 'GET':
 
             if menu:
                 productos = productos.filter(marca__nombre__icontains=menu)
 
-                return render(request, 'tienda/informes.html', {'productos': productos, 'marcas': marcas, 'menu': menu, 'ventas':ventas, 'users':usuarios, 'top_productos':top_product3[:10]})
+                return render(request, 'tienda/informes.html',
+                              {'productos': productos, 'marcas': marcas, 'menu': menu, 'ventas': ventas,
+                               'users': usuarios, 'top_productos': top_product3[:10]})
 
         if request.method == 'POST':
             productos2 = Productos.objects.all()
@@ -256,9 +259,37 @@ def informe(request):
             if elec:
                 productos2 = Compra.objects.all().filter(nombre_usuario__icontains=elec)
 
-                return render(request, 'tienda/informes.html', {'productos': productos, 'usuario_compras':productos2, 'marcas': marcas, 'eleccion': elec, 'top_productos':top_product3[:10], 'ventas':ventas,'users':usuarios})
-        return render(request, 'tienda/informes.html', {'productos': productos, 'marcas': marcas, 'ventas':ventas, 'users':usuarios})
+                return render(request, 'tienda/informes.html',
+                              {'productos': productos, 'usuario_compras': productos2, 'marcas': marcas,
+                               'eleccion': elec, 'top_productos': top_product3[:10], 'ventas': ventas,
+                               'users': usuarios, 'top_productos': top_product3[:10]})
+        return render(request, 'tienda/informes.html',
+                      {'productos': productos, 'marcas': marcas, 'ventas': ventas, 'users': usuarios,
+                       'top_productos': top_product3[:10]})
     else:
         return redirect('tienda:login')
 
 
+def informe2(request):
+    if request.user.is_superuser:
+        return render(request, 'informes/informes2.html')
+    return redirect('tienda:login')
+
+
+def marcas_por_productos(request):
+    if request.user.is_superuser:
+
+        marcas = Marca.objects.all()
+        menu = request.GET.get('menu')
+        productos = Productos.objects.all()
+        if menu:
+            productos = productos.filter(marca__nombre__icontains=menu)
+        return render(request, 'informes/marc_product.html', {'marcas': marcas, 'menu': menu, 'productos': productos})
+    return redirect('tienda:login')
+def top_productos(request):
+    if request.user.is_superuser:
+        ventas = Compra.objects.all()
+        ventas = ventas.order_by('-unidades')[:10]
+
+        return render(request,'informes/top_productos.html',{'ventas':ventas})
+    return redirect('tienda:login')

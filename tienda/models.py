@@ -32,7 +32,7 @@ class Compra(models.Model):
     fecha = models.DateField('Fecha')
     unidades = models.IntegerField('Unidades')
     importe = models.CharField('Importe',max_length=50,validators=[validar_Textos])
-    producto = models.ForeignKey(Productos, on_delete=models.SET_NULL, null=True)
+    producto = models.ForeignKey(Productos, on_delete=models.CASCADE)
     nombre_usuario = models.CharField('Nombre Usuario',max_length=50)
 
     def __str__(self):
