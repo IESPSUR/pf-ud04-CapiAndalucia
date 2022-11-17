@@ -1,0 +1,18 @@
+{% extends 'tienda/base.html' %}
+{% block content %}
+    <ul>
+        <li>
+            <a href="{% url 'tienda:marc_product' %}">Productos por marcas</a>
+        </li>
+        <li>
+            <a href="{% url 'tienda:top_productos' %}">TOP PRODUCTOS</a>
+        </li>
+        <li>
+            <a href="{% url 'tienda:compras_usuario' %}">COMPRAS DE USUARIO</a>
+        </li>
+        <li>
+            <a href="{% url 'tienda:top_usuarios' %}">TOP USUARIOS</a>
+        </li>
+    </ul>
+
+{% endblock %}

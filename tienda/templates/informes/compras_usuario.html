@@ -1,0 +1,40 @@
+{% extends 'tienda/base.html' %}
+{% block content %}
+
+<form action="{% url 'tienda:compras_usuario' %}" method="post">
+    {% csrf_token %}
+
+        <select name="usuario">
+          <option value="" selected></option>
+            {% for user in users %}
+              <option value="{{ user.username }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit">
+    </form>
+    <table>
+        <tr>
+            <th>{{ eleccion }}</th>
+        </tr>
+        {% for product in usuario_compras %}
+
+                <tr>
+                    <td>{{ product.producto }}</td>
+                </tr>
+                <tr>
+                    <td>{{ product.fecha }}</td>
+                </tr>
+                <tr>
+                    <td>{{ product.unidades }}</td>
+                </tr>
+                <tr>
+                    <td>{{ product.importe }} €</td>
+                </tr>
+
+
+        {% endfor %}
+    </table>
+
+
+{% endblock %}

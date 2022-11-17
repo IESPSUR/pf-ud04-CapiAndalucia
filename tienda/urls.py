@@ -3,9 +3,10 @@ from . import views
 
 app_name='tienda'
 urlpatterns = [
+    path('tienda/informes2/top_clientes', views.top_clientes, name='top_usuarios'),
+    path('tienda/informes2/compras_usuario', views.compra_usuario, name='compras_usuario'),
     path('tienda/informes2/top_productos', views.top_productos, name='top_productos'),
     path('tienda/informes2/marcas_de_productos', views.marcas_por_productos, name='marc_product'),
-    path('tienda/informes2', views.informe2, name='informe2'),
     path('tienda/informes', views.informe, name='informe'),
     path('tienda/checkout/<int:id>', views.checkout, name='checkout'),
     path('tienda/compras/', views.compras, name='compras'),

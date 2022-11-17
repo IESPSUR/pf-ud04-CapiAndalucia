@@ -1,0 +1,15 @@
+{% extends 'tienda/base.html' %}
+{% block content %}
+<p>TOP 10 USUARIOS!!!!</p>
+
+    <table>
+        {% for user in users %}
+            {% for venta in ventas %}
+                {% if venta.nombre_usuario == user.username %}
+                    <h1>{{ user.username }}</h1>
+                {% endif %}
+
+            {% endfor %}
+        {% endfor %}
+    </table>
+{% endblock %}

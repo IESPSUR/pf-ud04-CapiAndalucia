@@ -91,11 +91,12 @@
 
         {% endfor %}
     </table>
+    <h1>TOP PRODUCTOS</h1>
     <table>
         {% for top_producto in top_productos %}
             {% for producto in productos %}
                 {% if producto.id == top_producto.id %}
-                    <h1>{{ producto.nombre }}</h1>
+                    <h2>{{ producto.nombre }}</h2>
                 {% endif %}
 
             {% endfor %}
