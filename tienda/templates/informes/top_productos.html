@@ -1,11 +1,35 @@
 {% extends 'tienda/base.html' %}
 {% block content %}
 
-    <table>
+    <table class="table table-striped">
+        <tr>
+            <th>Nombre</th>
+            <th>Modelo</th>
+            <th>Marca</th>
+            <th>Detalles</th>
+            <th>Cantidad Vendida</th>
+
+        </tr>
         {% for venta in ventas %}
             {% for producto in productos %}
-                {% if producto.id == venta.id %}
-                    <h1>{{ producto.nombre }}</h1>
+                {% if producto.id == venta.producto_id %}
+                    <tr>
+                        <td>
+                            {{ producto.nombre }}
+                        </td>
+                        <td>
+                            {{ producto.modelo }}
+                        </td>
+                        <td>
+                            {{ producto.marca }}
+                        </td>
+                        <td>
+                            {{ producto.detalles }}
+                        </td>
+                        <td>
+                            {{ venta.dcount }}
+                        </td>
+                    </tr>
                 {% endif %}
 
             {% endfor %}

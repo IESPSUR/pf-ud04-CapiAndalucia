@@ -18,7 +18,8 @@
             <th>{{ eleccion }}</th>
         </tr>
         {% for product in usuario_compras %}
-
+            {% for user in users2 %}
+                {% if user.id == product.nombre_usuario_id %}
                 <tr>
                     <td>{{ product.producto }}</td>
                 </tr>
@@ -31,7 +32,8 @@
                 <tr>
                     <td>{{ product.importe }} €</td>
                 </tr>
-
+                {% endif %}
+            {% endfor %}
 
         {% endfor %}
     </table>

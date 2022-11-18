@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from .validations import validar_Textos, validar_precio
 
@@ -33,10 +34,10 @@ class Compra(models.Model):
     unidades = models.IntegerField('Unidades')
     importe = models.CharField('Importe',max_length=50,validators=[validar_Textos])
     producto = models.ForeignKey(Productos, on_delete=models.CASCADE)
-    nombre_usuario = models.CharField('Nombre Usuario',max_length=50)
+    nombre_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.id) + ' ' + self.nombre_usuario
+        return str(self.id) + ' ' + str(self.producto)
 
 
 
