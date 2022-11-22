@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from tienda.models import Productos, Marca, Compra
 from .forms import ProductosForm, CustomUserCreationForm, CantidadCompra
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, Count
 
 from django.contrib.auth.models import User
 
